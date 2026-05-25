@@ -1,0 +1,63 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/gameplay/Gameplay.gd" id="1_gameplay"]
+
+[node name="Gameplay" type="Node2D"]
+script = ExtResource("1_gameplay")
+
+[node name="ArenaBounds" type="Line2D" parent="."]
+position = Vector2(960, 560)
+points = PackedVector2Array(-520, -300, 520, -300, 520, 300, -520, 300, -520, -300)
+width = 6.0
+default_color = Color(0.2, 0.75, 0.9, 1)
+
+[node name="LauncherMarker" type="Marker2D" parent="."]
+position = Vector2(960, 880)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 384.0
+offset_bottom = 264.0
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/PanelContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StatusLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Gameplay Prototype"
+autowrap_mode = 3
+
+[node name="ShootButton" type="Button" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Spend Test Shot"
+
+[node name="CompleteWaveButton" type="Button" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Complete Test Wave"
+
+[node name="EndRunButton" type="Button" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "End Run"
