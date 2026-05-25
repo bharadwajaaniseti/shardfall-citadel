@@ -1,18 +1,68 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=7 format=3]
 
-[ext_resource type="Script" path="res://scripts/gameplay/Gameplay.gd" id="1_gameplay"]
+[ext_resource type="Script" path="res://scripts/gameplay/GameplayController.gd" id="1_controller"]
+[ext_resource type="Script" path="res://scripts/gameplay/Cannon.gd" id="2_cannon"]
+[ext_resource type="Script" path="res://scripts/gameplay/AimGuide.gd" id="3_aim_guide"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left_wall"]
+size = Vector2(48, 1300)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right_wall"]
+size = Vector2(48, 1300)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_top_wall"]
+size = Vector2(2000, 48)
 
 [node name="Gameplay" type="Node2D"]
-script = ExtResource("1_gameplay")
+script = ExtResource("1_controller")
 
-[node name="ArenaBounds" type="Line2D" parent="."]
-position = Vector2(960, 560)
-points = PackedVector2Array(-520, -300, 520, -300, 520, 300, -520, 300, -520, -300)
-width = 6.0
-default_color = Color(0.2, 0.75, 0.9, 1)
+[node name="AimGuide" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_aim_guide")
 
-[node name="LauncherMarker" type="Marker2D" parent="."]
-position = Vector2(960, 880)
+[node name="Blocks" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Balls" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Effects" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Walls" type="Node2D" parent="."]
+
+[node name="LeftWall" type="StaticBody2D" parent="Walls" groups=["walls"]]
+position = Vector2(-24, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/LeftWall"]
+shape = SubResource("RectangleShape2D_left_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="Walls" groups=["walls"]]
+position = Vector2(1944, 540)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/RightWall"]
+shape = SubResource("RectangleShape2D_right_wall")
+
+[node name="TopWall" type="StaticBody2D" parent="Walls" groups=["walls"]]
+position = Vector2(960, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Walls/TopWall"]
+shape = SubResource("RectangleShape2D_top_wall")
+
+[node name="ArenaFrame" type="Line2D" parent="."]
+points = PackedVector2Array(0, 1036, 0, 0, 1920, 0, 1920, 1036)
+width = 8.0
+default_color = Color(0.22, 0.62, 0.78, 0.85)
+
+[node name="ReturnLine" type="Line2D" parent="."]
+points = PackedVector2Array(0, 1046, 1920, 1046)
+width = 3.0
+default_color = Color(0.95, 0.7, 0.32, 0.55)
+
+[node name="Cannon" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(960, 956)
+script = ExtResource("2_cannon")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -23,41 +73,103 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD"]
 offset_left = 24.0
 offset_top = 24.0
-offset_right = 384.0
-offset_bottom = 264.0
+offset_right = 336.0
+offset_bottom = 224.0
+mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+mouse_filter = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/HUD/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 10
+mouse_filter = 2
+theme_override_constants/separation = 8
 
-[node name="StatusLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+text = "Shardfall Prototype"
+
+[node name="WaveRow" type="HBoxContainer" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WaveLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/WaveRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "Wave"
+
+[node name="WaveValueLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/WaveRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Gameplay Prototype"
-autowrap_mode = 3
+mouse_filter = 2
+text = "1"
+horizontal_alignment = 2
 
-[node name="ShootButton" type="Button" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="BlocksRow" type="HBoxContainer" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BlocksLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/BlocksRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "Blocks"
+
+[node name="BlocksValueLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/BlocksRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Spend Test Shot"
+mouse_filter = 2
+text = "0"
+horizontal_alignment = 2
 
-[node name="CompleteWaveButton" type="Button" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="ShotsRow" type="HBoxContainer" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ShotsLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/ShotsRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "Shots"
+
+[node name="ShotsValueLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/ShotsRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Complete Test Wave"
+mouse_filter = 2
+text = "Launched 0"
+horizontal_alignment = 2
 
-[node name="EndRunButton" type="Button" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="CitadelRow" type="HBoxContainer" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="CitadelLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/CitadelRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "Citadel HP"
+
+[node name="CitadelValueLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer/CitadelRow"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "End Run"
+mouse_filter = 2
+text = "100/100"
+horizontal_alignment = 2
+
+[node name="StatusValueLabel" type="Label" parent="CanvasLayer/HUD/PanelContainer/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+text = "Ready to fire"
