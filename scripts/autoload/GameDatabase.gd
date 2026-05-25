@@ -2,35 +2,100 @@ class_name GameDatabaseAutoload
 extends Node
 
 const BALLS: Dictionary = {
-	"starter_ball": {
-		"id": "starter_ball",
-		"display_name": "Shard Pebble",
-		"rarity": "common",
-		"damage": 1,
-		"speed": 720.0,
-		"pierce": 0,
-		"bounce_bonus": 0,
-		"description": "A reliable ricochet shot for new citadel defenders.",
+	"basic_orb": {
+		"id": "basic_orb",
+		"display_name": "Basic Orb",
+		"description": "A balanced starter orb with normal damage, speed, and bounce.",
+		"base_damage": 1,
+		"speed": 840.0,
+		"radius": 12.0,
+		"color": "#dfffe8",
+		"behaviour_type": "basic",
+		"parameters": {},
 	},
-	"iron_orb": {
-		"id": "iron_orb",
-		"display_name": "Iron Orb",
-		"rarity": "uncommon",
-		"damage": 2,
-		"speed": 620.0,
-		"pierce": 1,
-		"bounce_bonus": 0,
-		"description": "A heavier ball that breaks fortified blocks.",
+	"heavy_orb": {
+		"id": "heavy_orb",
+		"display_name": "Heavy Orb",
+		"description": "A slower, larger orb that hits harder and resists void pull.",
+		"base_damage": 2,
+		"speed": 680.0,
+		"radius": 16.0,
+		"color": "#d6b85f",
+		"behaviour_type": "heavy",
+		"parameters": {
+			"void_pull_resistance": 0.45,
+		},
 	},
-	"splinter_prism": {
-		"id": "splinter_prism",
-		"display_name": "Splinter Prism",
-		"rarity": "rare",
-		"damage": 1,
-		"speed": 760.0,
-		"pierce": 0,
-		"bounce_bonus": 2,
-		"description": "Gains extra angles after each wall bounce.",
+	"ember_orb": {
+		"id": "ember_orb",
+		"display_name": "Ember Orb",
+		"description": "Applies short burn damage after direct hits.",
+		"base_damage": 1,
+		"speed": 840.0,
+		"radius": 12.0,
+		"color": "#f26a3d",
+		"behaviour_type": "ember",
+		"parameters": {
+			"burn_damage": 1,
+			"burn_ticks": 2,
+		},
+	},
+	"frost_orb": {
+		"id": "frost_orb",
+		"display_name": "Frost Orb",
+		"description": "Chills blocks so the next hit deals bonus damage.",
+		"base_damage": 1,
+		"speed": 800.0,
+		"radius": 12.0,
+		"color": "#78e1ff",
+		"behaviour_type": "frost",
+		"parameters": {
+			"chill_duration": 3.0,
+			"freeze_bonus_multiplier": 1.75,
+		},
+	},
+	"spark_orb": {
+		"id": "spark_orb",
+		"display_name": "Spark Orb",
+		"description": "Can chain small damage to a nearby block on hit.",
+		"base_damage": 1,
+		"speed": 900.0,
+		"radius": 11.0,
+		"color": "#f4e85f",
+		"behaviour_type": "spark",
+		"parameters": {
+			"chain_range": 150.0,
+			"chain_damage": 1,
+			"chain_chance": 0.45,
+		},
+	},
+	"split_orb": {
+		"id": "split_orb",
+		"display_name": "Split Orb",
+		"description": "Splits once into smaller orbs after enough bounces.",
+		"base_damage": 1,
+		"speed": 820.0,
+		"radius": 11.0,
+		"color": "#d7ff56",
+		"behaviour_type": "split",
+		"parameters": {
+			"split_after_bounces": 3,
+			"split_count": 2,
+			"split_damage_multiplier": 0.65,
+		},
+	},
+	"drill_orb": {
+		"id": "drill_orb",
+		"display_name": "Drill Orb",
+		"description": "Pierces through the first block it hits, then behaves normally.",
+		"base_damage": 1,
+		"speed": 800.0,
+		"radius": 12.0,
+		"color": "#8de2d4",
+		"behaviour_type": "drill",
+		"parameters": {
+			"pierce_count": 1,
+		},
 	},
 }
 
@@ -59,26 +124,89 @@ const RELICS: Dictionary = {
 }
 
 const BLOCKS: Dictionary = {
+	"basic_block": {
+		"id": "basic_block",
+		"display_name": "Basic Block",
+		"base_hp": 1,
+		"color": "#2f97c7",
+		"description": "A simple shard block that takes normal damage.",
+		"behaviour_type": "basic",
+		"parameters": {},
+		"reward": {"shards": 1},
+	},
 	"stone_block": {
 		"id": "stone_block",
 		"display_name": "Stone Block",
-		"hp": 2,
-		"armor": 0,
-		"reward": {"shards": 1},
-	},
-	"crystal_block": {
-		"id": "crystal_block",
-		"display_name": "Crystal Block",
-		"hp": 1,
-		"armor": 0,
+		"base_hp": 3,
+		"color": "#7f858d",
+		"description": "A durable stone block with higher HP.",
+		"behaviour_type": "stone",
+		"parameters": {},
 		"reward": {"shards": 2},
 	},
-	"bulwark_block": {
-		"id": "bulwark_block",
-		"display_name": "Bulwark Block",
-		"hp": 4,
-		"armor": 1,
+	"bloom_pod": {
+		"id": "bloom_pod",
+		"display_name": "Bloom Pod",
+		"base_hp": 2,
+		"color": "#4fbf65",
+		"description": "Heals nearby blocks when hit, but not when destroyed.",
+		"behaviour_type": "bloom",
+		"parameters": {
+			"heal_radius": 120.0,
+			"heal_amount": 1,
+		},
+		"reward": {"shards": 2},
+	},
+	"ember_crystal": {
+		"id": "ember_crystal",
+		"display_name": "Ember Crystal",
+		"base_hp": 2,
+		"color": "#e46936",
+		"description": "Explodes on destruction and damages nearby blocks.",
+		"behaviour_type": "ember",
+		"parameters": {
+			"explosion_radius": 130.0,
+			"explosion_damage": 1,
+		},
 		"reward": {"shards": 3},
+	},
+	"frost_shell": {
+		"id": "frost_shell",
+		"display_name": "Frost Shell",
+		"base_hp": 3,
+		"color": "#54c8df",
+		"description": "Armoured ice that reduces incoming damage.",
+		"behaviour_type": "frost",
+		"parameters": {
+			"armour": 1,
+		},
+		"reward": {"shards": 3},
+	},
+	"mirror_shard": {
+		"id": "mirror_shard",
+		"display_name": "Mirror Shard",
+		"base_hp": 2,
+		"color": "#35c7bd",
+		"description": "Boosts the ball slightly when struck.",
+		"behaviour_type": "mirror",
+		"parameters": {
+			"speed_multiplier": 1.12,
+			"max_speed": 1120.0,
+		},
+		"reward": {"shards": 3},
+	},
+	"void_stone": {
+		"id": "void_stone",
+		"display_name": "Void Stone",
+		"base_hp": 4,
+		"color": "#7650b8",
+		"description": "Pulls nearby balls toward itself with a weak attraction.",
+		"behaviour_type": "void",
+		"parameters": {
+			"attraction_radius": 190.0,
+			"attraction_strength": 210.0,
+		},
+		"reward": {"shards": 4},
 	},
 }
 
@@ -141,8 +269,8 @@ const UPGRADES: Dictionary = {
 }
 
 
-func get_ball(id: StringName) -> Dictionary:
-	return _get_entry(BALLS, id)
+func get_ball(id: String) -> Dictionary:
+	return _get_entry(BALLS, StringName(id))
 
 
 func get_relic(id: StringName) -> Dictionary:
